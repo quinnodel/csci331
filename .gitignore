@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (from Week 9 onward)
+node_modules/
+npm-debug.log*
+.next/
+dist/
+build/
+
+# Secrets — DB creds for the PHP/MySQL weeks live here, never commit them
+.env
+.env.*
+config.local.php
+db_config.php
+
+# Claude Code local settings
+.claude/settings.local.json
