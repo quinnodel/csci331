@@ -1,5 +1,7 @@
 # CSCI 331 — Web Development
 
+Repo: https://github.com/quinnodel/csci331 (private).
+
 Course working directory. See `CLAUDE.md` for policy and conventions,
 `SCHEDULE.md` for the week-by-week plan, `SETUP.md` for tools and server access.
 
