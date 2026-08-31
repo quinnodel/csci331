@@ -28,18 +28,20 @@ Serve pages out of `public_html/`, i.e. `public_html/index.html`.
 Access requires being on **MSU-Secure Wi-Fi** on campus, or connected through the
 **MSU VPN** off campus.
 
-⚠️ The published-URL line on the notes page (`notes/publishing.html`) is typo'd —
-it prints three different hostnames across three lines: `csci331.cs.montana.edu`,
-`csci331vm.cs.montana.edu`, and `csci33vm1.cs.montana.edu`. Only the middle one
-resolves (153.90.6.209); the other two are NXDOMAIN. So the live URL is almost
-certainly:
+✅ The published-URL form is **confirmed** by the Hello Server assignment text:
 
 ```
-csci331vm.cs.montana.edu/~<netID>.student.montana.edu/index.html
+http://csci331vm.cs.montana.edu/<NetID>/
 ```
 
-Confirm the exact form in class — the tilde-path convention is unusual enough to
-be worth one question rather than an hour of guessing.
+No tilde, no `.student.montana.edu` suffix in the path — the notes page
+(`notes/publishing.html`) is simply typo'd, and prints three hostnames across
+three lines (`csci331.cs.montana.edu`, `csci331vm.cs.montana.edu`,
+`csci33vm1.cs.montana.edu`). Only `csci331vm.cs.montana.edu` resolves
+(153.90.6.209). Ignore the other two.
+
+Note the URL is **http**, not https, and reaching it requires the VPN when off
+campus.
 
 ## Reading the course assigned (MDN)
 
