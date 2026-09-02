@@ -22,11 +22,12 @@ build/
 config.local.php
 db_config.php
 
-# Claude Code local settings
-.claude/settings.local.json
+# Claude Code — settings, agents, skills; nothing under .claude/ is coursework
+.claude/
 
-# Course notes, logistics, and assignment briefs — local only, not part of the
-# public repo. README.md and CLAUDE.md are the exceptions.
+# Agent-facing docs stay local: CLAUDE.md, SETUP.md, SCHEDULE.md, BRIEF.md and
+# notes/ are instructions for Claude sessions working in this directory, not
+# coursework. Every markdown file is ignored except README.md.
 *.md
 !README.md
-!CLAUDE.md
+notes/

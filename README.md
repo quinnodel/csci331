@@ -2,9 +2,9 @@
 
 Repo: https://github.com/quinnodel/csci331 (public).
 
-Course working directory. See `CLAUDE.md` for policy and conventions.
-`SCHEDULE.md`, `SETUP.md`, `notes/`, and the per-assignment `BRIEF.md` files are
-local-only (gitignored) — course logistics, not part of the published repo.
+Course working directory. `SCHEDULE.md`, `SETUP.md`, `notes/`, and the
+per-assignment `BRIEF.md` files are local-only (gitignored) — course logistics,
+not part of the published repo.
 
 ```
 assignments/     one directory per assignment, numbered in schedule order
