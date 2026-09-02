@@ -1,0 +1,3 @@
+# Which assignment bin/deploy.sh publishes to ~/public_html on the course server.
+# One path, relative to the repo root. Change it here, push, then deploy.
+assignments/01-publishing-content
