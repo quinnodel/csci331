@@ -2,13 +2,14 @@
 
 Repo: https://github.com/quinnodel/csci331 (public).
 
-Course working directory. See `CLAUDE.md` for policy and conventions,
-`SCHEDULE.md` for the week-by-week plan, `SETUP.md` for tools and server access.
+Course working directory. See `CLAUDE.md` for policy and conventions.
+`SCHEDULE.md`, `SETUP.md`, `notes/`, and the per-assignment `BRIEF.md` files are
+local-only (gitignored) — course logistics, not part of the published repo.
 
 ```
 assignments/     one directory per assignment, numbered in schedule order
 final-project/   published site + docs, due finals week
-notes/           my own notes
+notes/           my own notes (local only)
 scratch/         experiments, throwaway — not graded work
 bin/deploy.sh    run on csci331vm: pull + publish the assignment named in CURRENT
 CURRENT          which assignment is live on the course server

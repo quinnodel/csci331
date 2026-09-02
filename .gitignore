@@ -24,3 +24,9 @@ db_config.php
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Course notes, logistics, and assignment briefs — local only, not part of the
+# public repo. README.md and CLAUDE.md are the exceptions.
+*.md
+!README.md
+!CLAUDE.md
