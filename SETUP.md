@@ -68,7 +68,7 @@ site and a GitHub repo.
 
 # Git workflow
 
-Repo: **https://github.com/quinnodel/csci331** — private, default branch `main`.
+Repo: **https://github.com/quinnodel/csci331** — public, default branch `main`.
 
 Local pushes use HTTPS through the `gh` CLI credential helper; nothing to set up.
 
@@ -80,46 +80,19 @@ git push
 
 ## Pulling onto the course server
 
-The repo is private, so `csci331vm` needs its own credentials. Use a **read-only
-deploy key** — a keypair that grants access to this one repo and nothing else.
-Do NOT put a personal access token on a shared university VM: a PAT carries your
-whole account, a deploy key carries one repo, read-only. (SSH agent forwarding,
-`ssh -A`, is the other zero-setup option, but on a shared box root can borrow
-the forwarded agent and act as *you* on all of GitHub while you're connected —
-the deploy key is the smaller blast radius.)
-
-Run these **on the server**, once:
+The repo is public, so the server needs no credentials at all. On the server,
+once:
 
 ```
-ssh -l <netid>@student.montana.edu csci331vm.cs.montana.edu
-
-ssh-keygen -t ed25519 -f ~/.ssh/csci331_deploy -N "" -C "csci331vm deploy key"
-cat ~/.ssh/csci331_deploy.pub
-```
-
-Then, in the repo's settings on GitHub — Settings → Deploy keys → Add deploy key —
-paste that public key, title it `csci331vm`, and **leave "Allow write access"
-unchecked**.
-
-Back on the server, tell SSH to use that key for GitHub, then clone **outside**
-`public_html`:
-
-```
-cat >> ~/.ssh/config <<'CONF'
-Host github.com
-  IdentityFile ~/.ssh/csci331_deploy
-  IdentitiesOnly yes
-CONF
-chmod 600 ~/.ssh/config
-
-git clone git@github.com:quinnodel/csci331.git ~/csci331
+git clone https://github.com/quinnodel/csci331.git ~/csci331
 ~/csci331/bin/deploy.sh
 ```
 
-⚠️ Never clone into `~/public_html` itself. Apache would serve `.git/` over HTTP
-and anyone on the VPN could download the whole repo — every assignment, past and
-future. In a class where sharing solutions is a conduct violation, that is the
-one mistake not to make.
+Clone to `~/csci331`, **not** into `~/public_html`. Two reasons, neither about
+secrecy: the repo root (`README.md`, `CLAUDE.md`, `assignments/`) is not the site
+root Assignment 1 wants `index.html` at, and on an SELinux box files that were
+not copied into `public_html` carry the wrong context and Apache 403s them.
+`deploy.sh` handles both.
 
 ## The everyday loop
 
@@ -157,15 +130,17 @@ touching `CURRENT`: `deploy.sh assignments/02-hypertext-forms`.
 
 ⚠️ Never edit files directly on the server. Edit locally, commit, push, deploy.
 
-## Going public for the final project
+## On being public
 
-The final project is graded on the published site **and** the GitHub repo, so it
-must be visible to the instructor by finals week. Two options then:
+The repo went public in Week 2 so the course server can pull it with a plain
+`git clone` — no deploy key, no token, nothing to rotate or lose. Two consequences:
 
-1. Flip this repo to public — `gh repo edit --visibility public`
-2. Keep it private and add the instructor as a collaborator
+- **GitHub Pages is free** from a public repo (private needs Pro), which Assignment 1
+  needs anyway for its live Pages link.
+- **Anyone can read the solutions.** The conduct code forbids *submitting* someone
+  else's work and *sharing verbatim code*; a public repo is not handing code to
+  anyone, but if a classmate lifts from it you may still be asked about it. Don't
+  link the repo in class channels, and keep it that way until grades are in.
 
-Keeping it private during the term means classmates cannot copy your solutions,
-which is the reason for the split. GitHub Pages from a private repo needs GitHub
-Pro — free via the Student Developer Pack (https://education.github.com/pack) if
-you want Pages before then.
+The final project is graded on this repo, so public is where it had to end up
+regardless.
