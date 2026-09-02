@@ -83,7 +83,10 @@ git push
 The repo is private, so `csci331vm` needs its own credentials. Use a **read-only
 deploy key** — a keypair that grants access to this one repo and nothing else.
 Do NOT put a personal access token on a shared university VM: a PAT carries your
-whole account, a deploy key carries one repo, read-only.
+whole account, a deploy key carries one repo, read-only. (SSH agent forwarding,
+`ssh -A`, is the other zero-setup option, but on a shared box root can borrow
+the forwarded agent and act as *you* on all of GitHub while you're connected —
+the deploy key is the smaller blast radius.)
 
 Run these **on the server**, once:
 
@@ -98,7 +101,8 @@ Then, in the repo's settings on GitHub — Settings → Deploy keys → Add depl
 paste that public key, title it `csci331vm`, and **leave "Allow write access"
 unchecked**.
 
-Back on the server, tell SSH to use that key for GitHub:
+Back on the server, tell SSH to use that key for GitHub, then clone **outside**
+`public_html`:
 
 ```
 cat >> ~/.ssh/config <<'CONF'
@@ -109,29 +113,49 @@ CONF
 chmod 600 ~/.ssh/config
 
 git clone git@github.com:quinnodel/csci331.git ~/csci331
+~/csci331/bin/deploy.sh
 ```
 
-From then on, deploying is:
+⚠️ Never clone into `~/public_html` itself. Apache would serve `.git/` over HTTP
+and anyone on the VPN could download the whole repo — every assignment, past and
+future. In a class where sharing solutions is a conduct violation, that is the
+one mistake not to make.
+
+## The everyday loop
 
 ```
-cd ~/csci331 && git pull
+home:    edit → git add -A → git commit -m "..." → git push
+server:  ~/csci331/bin/deploy.sh
 ```
 
-## Serving the pulled work out of public_html
-
-The server serves `~/public_html/`. The repo holds many assignments, so publish
-whichever one is current by symlinking it:
+`bin/deploy.sh` does `git pull --ff-only`, empties `~/public_html`, copies in the
+assignment named in the `CURRENT` file, and fixes permissions. So the whole
+deploy from your laptop, no login shell needed, is:
 
 ```
-ln -sfn ~/csci331/assignments/01-publishing-content ~/public_html
+ssh -l <netid>@student.montana.edu csci331vm.cs.montana.edu '~/csci331/bin/deploy.sh'
 ```
 
-Re-point that symlink when a new assignment goes live. If symlink-following is
-disabled on the VM, clone straight into `~/public_html` instead and keep only the
-current assignment's files at its root.
+To skip the NetID password prompt each time, put a laptop key on the VM once:
+`ssh-copy-id -o User=<netid>@student.montana.edu csci331vm.cs.montana.edu`
+(if the VM doesn't allow key auth you'll just keep typing the password — no harm).
 
-⚠️ Never edit files directly on the server. Edit locally, commit, push, pull. A
-`git pull` onto edited files either conflicts or clobbers.
+**Switching which assignment is live:** edit `CURRENT` at home (one line, e.g.
+`assignments/02-hypertext-forms`), commit, push, deploy. For a one-off without
+touching `CURRENT`: `deploy.sh assignments/02-hypertext-forms`.
+
+**Guard rails built in:**
+
+| Situation | What the script does |
+|---|---|
+| Server copy was edited by hand | `--ff-only` pull refuses; fix by `git -C ~/csci331 reset --hard origin/main` |
+| `~/public_html` has files it didn't put there | Refuses to wipe them; move them or `touch ~/public_html/.deployed-by-csci331` to hand over |
+| `CURRENT` points at a missing dir | Exits before touching `public_html` |
+| SELinux box | Runs `restorecon` on the docroot so Apache gets `httpd_user_content_t` |
+
+`BRIEF.md` in an assignment dir is not published — it's a course note.
+
+⚠️ Never edit files directly on the server. Edit locally, commit, push, deploy.
 
 ## Going public for the final project
 

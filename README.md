@@ -10,6 +10,8 @@ assignments/     one directory per assignment, numbered in schedule order
 final-project/   published site + docs, due finals week
 notes/           my own notes
 scratch/         experiments, throwaway — not graded work
+bin/deploy.sh    run on csci331vm: pull + publish the assignment named in CURRENT
+CURRENT          which assignment is live on the course server
 ```
 
 ## Assignments
